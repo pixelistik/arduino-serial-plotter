@@ -6,6 +6,7 @@
   ],
   "description": "",
   "dependencies": {
-    "epoch": "~0.8.4"
+    "epoch": "~0.8.4",
+    "jquery": "~2.2.4"
   }
 }
