@@ -4,6 +4,7 @@
 import gevent
 from gevent.wsgi import WSGIServer
 from gevent.queue import Queue
+from random import randint
 
 from flask import Flask, Response, render_template
 
@@ -47,7 +48,7 @@ def debug():
 def publish():
     #Dummy data - pick up from request for real data
     def notify():
-        msg = str(time.time())
+        msg = str(randint(0,100))
         for sub in subscriptions[:]:
             sub.put(msg)
 
