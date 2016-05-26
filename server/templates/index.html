@@ -15,14 +15,14 @@
         // Client-side Javascript in the HTML
 
         var targetContainer = document.getElementById("log-container");
-        var eventSource = new EventSource("/stream");
+        var eventSource = new EventSource("/subscribe");
 
-        eventSource.onMessage=  function(e) {
+        eventSource.onmessage=  function(e) {
             console.log(e);
-            // var newElement = document.createElement("li");
-            //
-            //   newElement.innerHTML = "message: " + e.data;
-            //   targetContainer.appendChild(newElement);
+            var newElement = document.createElement("li");
+
+              newElement.innerHTML = "message: " + e.data;
+              targetContainer.appendChild(newElement);
 
         };
         </script>

@@ -5,7 +5,7 @@ import gevent
 from gevent.wsgi import WSGIServer
 from gevent.queue import Queue
 
-from flask import Flask, Response
+from flask import Flask, Response, render_template
 
 import time
 
@@ -37,28 +37,7 @@ subscriptions = []
 # Client code consumes like this.
 @app.route("/")
 def index():
-    debug_template = """
-     <html>
-       <head>
-       </head>
-       <body>
-         <h1>Server sent events</h1>
-         <div id="event"></div>
-         <script type="text/javascript">
-
-         var eventOutputContainer = document.getElementById("event");
-         var evtSrc = new EventSource("/subscribe");
-
-         evtSrc.onmessage = function(e) {
-             console.log(e.data);
-             eventOutputContainer.innerHTML = e.data;
-         };
-
-         </script>
-       </body>
-     </html>
-    """
-    return(debug_template)
+    return render_template("index.html")
 
 @app.route("/debug")
 def debug():
