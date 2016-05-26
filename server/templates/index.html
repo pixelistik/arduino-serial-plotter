@@ -11,20 +11,6 @@
     <body>
         <ul id="log-container">
         </ul>
-        <script>
-        // Client-side Javascript in the HTML
-
-        var targetContainer = document.getElementById("log-container");
-        var eventSource = new EventSource("/subscribe");
-
-        eventSource.onmessage=  function(e) {
-            console.log(e);
-            var newElement = document.createElement("li");
-
-              newElement.innerHTML = "message: " + e.data;
-              targetContainer.appendChild(newElement);
-
-        };
-        </script>
+        <script src="{{ url_for('static', filename='js/app.js') }}"></script>
     </body>
 </html>
