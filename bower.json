@@ -1,0 +1,11 @@
+{
+  "name": "arduino-serial-plotter",
+  "homepage": "https://github.com/pixelistik/arduino-serial-plotter",
+  "authors": [
+    "pixelistik <code@pixelistik.de>"
+  ],
+  "description": "",
+  "dependencies": {
+    "epoch": "~0.8.4"
+  }
+}
