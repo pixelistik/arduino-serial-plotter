@@ -1,34 +1,25 @@
-var targetContainer = document.getElementById("log-container");
 var eventSource = new EventSource("/subscribe");
 
-var data = [
-    {
-    label: "One",
-    values: []
-    },
-    {
-    label: "Two",
-    values: []
-    },
-];
-
-var chart = $('#area').epoch({
-    type: 'time.line',
-    data: data,
-    axes: ['left', 'right', 'bottom'],
-    queueSize: 1,
-    historySize: 1,
-    fps: 60
-});
+var series1 = new TimeSeries();
 
 eventSource.onmessage = function(e) {
     console.log(e);
-    var newElement = document.createElement("li");
 
-      var newData = [
-          {time: Date.now(), y: e.data},
-          {time: Date.now(), y: e.data * 3}
-      ];
-
-      chart.push(newData);
+    series1.append(new Date().getTime(), e.data);
 };
+
+ function createTimeline() {
+   var chart = new SmoothieChart({
+       maxValueScale: 1.5,
+       grid:{
+           fillStyle: '#ffffff'
+       },
+       labels:{
+           fillStyle: '#000000'
+       }
+   });
+   chart.addTimeSeries(series1, { strokeStyle: 'rgba(255, 0, 0, 1)', lineWidth: 2 });
+   chart.streamTo(document.getElementById("smoothie"), 50);
+}
+
+createTimeline();

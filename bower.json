@@ -6,7 +6,6 @@
   ],
   "description": "",
   "dependencies": {
-    "epoch": "~0.8.4",
-    "jquery": "~2.2.4"
+    "smoothie": "~1.27.0"
   }
 }

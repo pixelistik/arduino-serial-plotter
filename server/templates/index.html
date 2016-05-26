@@ -6,17 +6,14 @@
         <title></title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='js/components/epoch/dist/css/epoch.min.css') }}">
     </head>
     <body>
         <ul id="log-container">
         </ul>
 
-        <div id="area" class="epoch category10" style="height: 200px;"></div>
+        <canvas id="smoothie" width="800" height="400"></canvas>
 
-        <script src="{{ url_for('static', filename='js/components/jquery/dist/jquery.min.js') }}"></script>
-        <script src="{{ url_for('static', filename='js/components/d3/d3.js') }}"></script>
-        <script src="{{ url_for('static', filename='js/components/epoch/dist/js/epoch.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/components/smoothie/smoothie.js') }}"></script>
         <script src="{{ url_for('static', filename='js/app.js') }}"></script>
     </body>
 </html>
