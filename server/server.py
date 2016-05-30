@@ -47,7 +47,7 @@ def subscribe():
                 msg = ser.readline()
                 for sub in subscriptions[:]:
                     sub.put(msg)
-                sleep(0.1)
+                sleep(0)
 
     global serialListener
     if not serialListener:
