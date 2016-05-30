@@ -1,5 +1,5 @@
 arduino-serial-plotter.pex: server
-	 pex flask . -m server.server:main -o dist/arduino-serial-plotter.pex -v --disable-cache
+	 pex flask pyserial gevent . -m server.server:main -o dist/arduino-serial-plotter.pex -v
 
 clean:
 	rm *.pex
