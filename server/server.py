@@ -6,11 +6,9 @@ from gevent.wsgi import WSGIServer
 from gevent.queue import Queue
 from random import randint
 from gevent import sleep
+import serial
 
 from flask import Flask, Response, render_template
-
-# import time
-
 
 # SSE "protocol" is described here: http://mzl.la/UPFyxY
 class ServerSentEvent(object):
@@ -37,36 +35,19 @@ app = Flask(__name__)
 subscriptions = []
 serialListener = None
 
-# Client code consumes like this.
 @app.route("/")
 def index():
     return render_template("index.html")
 
-@app.route("/debug")
-def debug():
-    return "Currently %d subscriptions" % len(subscriptions)
-
-@app.route("/publish")
-def publish():
-    #Dummy data - pick up from request for real data
-    def notify():
-        msg = str(randint(0,100))
-        for sub in subscriptions[:]:
-            sub.put(msg)
-
-    gevent.spawn(notify)
-
-    return "OK"
-
 @app.route("/subscribe")
 def subscribe():
-    #Dummy data - pick up from request for real data
     def notify():
         while True:
-            msg = str(randint(0,100))
-            for sub in subscriptions[:]:
-                sub.put(msg)
-            sleep(1)
+            with serial.Serial('/dev/pts/11') as ser:
+                msg = ser.readline()
+                for sub in subscriptions[:]:
+                    sub.put(msg)
+                sleep(0.1)
 
     global serialListener
     if not serialListener:
@@ -78,12 +59,9 @@ def subscribe():
         try:
             while True:
                 result = q.get()
-                print "seinding"
-                # sleep(1)
-                # ev = ServerSentEvent(str(randint(0,100)))
                 ev = ServerSentEvent(str(result))
                 yield ev.encode()
-        except GeneratorExit: # Or maybe use flask signals
+        except GeneratorExit:
             subscriptions.remove(q)
 
     return Response(gen(), mimetype="text/event-stream")
@@ -92,8 +70,6 @@ def main():
     app.debug = True
     server = WSGIServer(("", 5000), app)
     server.serve_forever()
-    # Then visit http://localhost:5000 to subscribe
-    # and send messages by visiting http://localhost:5000/publish
 
 if __name__ == "__main__":
     main()
