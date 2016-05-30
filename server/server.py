@@ -5,10 +5,11 @@ import gevent
 from gevent.wsgi import WSGIServer
 from gevent.queue import Queue
 from random import randint
+from gevent import sleep
 
 from flask import Flask, Response, render_template
 
-import time
+# import time
 
 
 # SSE "protocol" is described here: http://mzl.la/UPFyxY
@@ -34,6 +35,7 @@ class ServerSentEvent(object):
 
 app = Flask(__name__)
 subscriptions = []
+serialListener = None
 
 # Client code consumes like this.
 @app.route("/")
@@ -58,12 +60,27 @@ def publish():
 
 @app.route("/subscribe")
 def subscribe():
+    #Dummy data - pick up from request for real data
+    def notify():
+        while True:
+            msg = str(randint(0,100))
+            for sub in subscriptions[:]:
+                sub.put(msg)
+            sleep(1)
+
+    global serialListener
+    if not serialListener:
+        serialListener = gevent.spawn(notify)
+
     def gen():
         q = Queue()
         subscriptions.append(q)
         try:
             while True:
                 result = q.get()
+                print "seinding"
+                # sleep(1)
+                # ev = ServerSentEvent(str(randint(0,100)))
                 ev = ServerSentEvent(str(result))
                 yield ev.encode()
         except GeneratorExit: # Or maybe use flask signals
